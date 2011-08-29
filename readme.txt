@@ -1,11 +1,11 @@
 === SM Gallery ===
 
-Contributors: Jeremy Saxey & Seth Carstens
+Contributors: Jeremy Smeltzer & Seth Carstens
 Donate link: http://sethmatics.com/extend/plugins/sm-gallery
-Tags: gallery, featured image, media
-Requires at least: 3.0
-Tested up to: 3.1
-Stable tag: 1.0.1
+Tags: gallery, featured image, image, media, plugin, page
+Requires at least: 3.1
+Tested up to: 3.2.1
+Stable tag: 1.0.2
 
 Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
@@ -62,8 +62,8 @@ To install the plugin manually:
 - Cleaned up debug code that was not needed and commented plugin code to extend the use of the plugin for other developers.
 
 == Upgrade Notice ==
-Version 1.0.1
-Requires at least WordPress version 3.0.
+Version 1.0.2
+Requires at least WordPress version 3.1.
 
 == Frequently Asked Questions ==
 
