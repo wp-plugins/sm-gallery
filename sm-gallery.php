@@ -368,11 +368,10 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	// if we are just adding a link to the feat img
 	if($galleryType == 'hyperlink') {
 		$url = $post_meta['_sm_featured_gallery_hyperlink'][0];
-		$url = str_replace('http://', '', $url);
 		$target = '';
 		if( $post_meta['_sm_featured_gallery_hyperlink_new_widow'][0] == 'yes' )
 			$target = ' target="_blank"';
-		$html = '<a href="http://'.$url.'" id="featuredImgLink"' .$target.'>'.$html.'</a>';
+		$html = '<a href="'.$url.'" id="featuredImgLink"' .$target.'>'.$html.'</a>';
 		return $html;	
 	}
 	
