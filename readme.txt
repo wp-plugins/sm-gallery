@@ -1,6 +1,6 @@
 === SM Gallery ===
 
-Contributors: Jeremy Smeltzer & Seth Carstens
+Contributors: bigj9901, sethmatics
 Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.1
