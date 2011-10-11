@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://sethmatics.com/
 */
 
