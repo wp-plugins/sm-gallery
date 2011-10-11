@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://sethmatics.com/
 */
 
@@ -213,22 +213,50 @@ function sm_featured_gallery_form(){
 	
 	// show/hide gallery options based on type selection on page load
 	echo '<style>';
-	echo '#sm_featured_gallery_options, #sm_featured_gallery_thumb_options { display:none; }';
+	echo '#sm_featured_gallery_options, #sm_featured_gallery_thumb_options, #sm_featured_gallery_hyperlink_options { display:none; }';
 	if($post_meta['_sm_featured_gallery_type'][0] == 'link')	
 		echo '#sm_featured_gallery_options { display:block; }';
 	if($post_meta['_sm_featured_gallery_type'][0] == 'append')	
 		echo '#sm_featured_gallery_options, #sm_featured_gallery_thumb_options { display:block; }';
+	if($post_meta['_sm_featured_gallery_type'][0] == 'hyperlink')	
+		echo '#sm_featured_gallery_hyperlink_options { display:block; }';
 	echo '</style>';
 	
 	// show/hide gallery options when type field changes ?>
     <script type="text/javascript">
 	jQuery(document).ready(function() {
 		jQuery('#sm_featured_gallery_type').change(function() {
-			if(jQuery(this).val() != '')
-				jQuery('#sm_featured_gallery_options').show('fast');
-			else
-				jQuery('#sm_featured_gallery_options').hide('fast');
+			if(jQuery(this).val() == 'append' || jQuery(this).val() == 'link')
+				// if hyperlink options showing, hide and show gallery options
+				if( jQuery('#sm_featured_gallery_hyperlink_options').is(":visible") ) {				
+					jQuery('#sm_featured_gallery_hyperlink_options').hide('slow', function() {
+						jQuery('#sm_featured_gallery_options').show('fast');
+					})
+				}
+				// otherwise just show gallery options
+				else
+					jQuery('#sm_featured_gallery_options').show('fast');
 				
+			else if(jQuery(this).val() == 'hyperlink') {
+				// if gallery options showing, hide and show hyperlink options
+				if( jQuery('#sm_featured_gallery_options').is(":visible") ) {				
+					jQuery('#sm_featured_gallery_options').hide('slow', function() {
+						jQuery('#sm_featured_gallery_hyperlink_options').show('fast');
+					})
+					
+				}
+				// otherwise just show hyperlink options
+				else
+					jQuery('#sm_featured_gallery_hyperlink_options').show('fast');
+			}
+			
+			// if disabled hide all		
+			else {
+				jQuery('#sm_featured_gallery_options').hide('fast');
+				jQuery('#sm_featured_gallery_hyperlink_options').hide('fast');
+			}
+			
+			//show thumbnail options if appending to featured img	
 			if(jQuery(this).val() != 'append')
 				jQuery('#sm_featured_gallery_thumb_options').hide('fast');
 			else
@@ -240,6 +268,7 @@ function sm_featured_gallery_form(){
         <option value="">Disabled</option>
         <option value="link" <?php if($post_meta['_sm_featured_gallery_type'][0] == 'link') { echo ' selected="selected"'; } ?>>Link Featured Image To Gallery</option>
         <option value="append" <?php if($post_meta['_sm_featured_gallery_type'][0] == 'append') { echo ' selected="selected"'; } ?>>Append Featured Image</option>
+        <option value="hyperlink" <?php if($post_meta['_sm_featured_gallery_type'][0] == 'hyperlink') { echo ' selected="selected"'; } ?>>Add Hyperlink To Featured Image</option>
     </select>
     <br />
     
@@ -266,6 +295,28 @@ function sm_featured_gallery_form(){
             <br />
         </div>
     </div>
+    <div id="sm_featured_gallery_hyperlink_options">
+        <label for="sm_featured_gallery_hyperlink">Link</label><br />
+        <input name="sm_featured_gallery_hyperlink" id="sm_featured_gallery_hyperlink" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_hyperlink'][0]; ?>" />
+        <br />
+        <div style="margin-bottom:10px;">
+        	<input type="checkbox" name="sm_featured_gallery_hyperlink_new_checkbox" id="sm_featured_gallery_hyperlink_new_checkbox" value="yes" <?php if(get_post_meta($post->ID, '_sm_featured_gallery_hyperlink_new_widow', true) == 'yes') { echo 'checked="checked"'; } ?> >
+        	<label for="sm_featured_gallery_hyperlink_new_checkbox">Open In New Window</label>
+            <input name="sm_featured_gallery_hyperlink_new_widow" id="sm_featured_gallery_hyperlink_new_widow" type="hidden" value="" />
+            <script type="text/javascript">
+				jQuery(document).ready(function() {
+  					jQuery('#sm_featured_gallery_hyperlink_new_checkbox').change(function() {
+						if( jQuery('#sm_featured_gallery_hyperlink_new_checkbox').attr('checked') )
+							jQuery('#sm_featured_gallery_hyperlink_new_widow').val('yes');
+						else
+							jQuery('#sm_featured_gallery_hyperlink_new_widow').val('no');
+					});
+				});
+			</script>
+            <br />
+        </div>
+    </div>
+    
     
     
 	<?php 
@@ -292,7 +343,8 @@ function sm_featured_gallery_save(){
 			if($key == 'sm_featured_gallery_width' || $key == 'sm_featured_gallery_height' ) {
 				$value=str_replace('px', '', $value); 
 			}
-			if($key != 'sm_featured_gallery_nonce') {
+			// dont' save nonce or checkbox
+			if($key != 'sm_featured_gallery_nonce' && $key != 'sm_featured_gallery_hyperlink_new_checkbox') {
 				if($value != '')
 					update_post_meta($post->ID, '_'.$key, trim($value) );
 				else
@@ -312,6 +364,16 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	// if its disabled return featured image conent unfilltered
 	if($galleryType == '')
 		return $html;
+		
+	// if we are just adding a link to the feat img
+	if($galleryType == 'hyperlink') {
+		$url = $post_meta['_sm_featured_gallery_hyperlink'][0];
+		$target = '';
+		if( $post_meta['_sm_featured_gallery_hyperlink_new_widow'][0] == 'yes' )
+			$target = ' target="_blank"';
+		$html = '<a href="'.$url.'" id="featuredImgLink"' .$target.'>'.$html.'</a>';
+		return $html;	
+	}
 	
 	$sc_post_id = $post_meta['_sm_featured_gallery_post_id'][0] ;
 	$height = $post_meta['_sm_featured_gallery_height'][0];
@@ -321,6 +383,7 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	$thumb_class = $post_meta['_sm_featured_gallery_thumb_class'][0];
 	
 	$featuredObj = wp_get_attachment_image_src(get_post_thumbnail_id( $post_id ), 'full');
+		
 	
 	// build the shortcode based on options entered in form
 	$shortCodeContent ='[gallery modal="true" ';
