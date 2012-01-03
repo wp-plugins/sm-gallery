@@ -179,3 +179,31 @@
 .ui-dialog .ui-widget-header .ui-dialog-title {
 	font-size:14px!important;
 }
+
+/* MailIt PrintIt ShareIt */
+.ui-widget-content {background:#ebebeb !important; }
+.ui-widget-header { 
+	background:url(images/programs-loc/mailItheader.png) no-repeat scroll 0 0 transparent !important;
+	color:#fff !important;
+	text-transform:uppercase !important;
+	padding:0px 0 0 10px !important;
+	line-height:29px;
+	border:none !important;
+	}
+.ui-dialog .ui-dialog-titlebar-close { 
+	margin:-12px 0 0 !important;
+	}
+.ui-widget-content {
+	border:none !important;
+	}
+.ui-icon { 
+	background-color:#fff !important;
+	}
+
+.ui-dialog { padding:0 !important; }
+
+.ui-widget-overlay {
+	background:url(images/mailItOverlayBg.png) !important;
+	opacity:0.5 !important;
+	}
+/* End MailIt PrintIt ShareIt */
