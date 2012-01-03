@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://sethmatics.com/
 */
 
@@ -19,7 +19,9 @@ function sm_gallery_scripts_and_styles() {
 	wp_enqueue_script('jquery-ad-gallery-scripts', plugins_url('js/jquery.ad-gallery.js', __FILE__), array('jquery'), '', true );
 	//older version of UI scripts (core, resizeable, dragable, dialog) fixes IE Jump issue
 	wp_deregister_script( 'jquery-ui' );
-	wp_register_script( 'jquery-ui', plugins_url('/js/jquery-ui-dialog.custom.min.js', __FILE__) );
+	wp_register_script( 'jquery-ui', plugins_url('/js/jquery-ui-dialog.custom.min.js', __FILE__), array('jquery') );
+	wp_enqueue_script('jquery-ui');
+	wp_enqueue_style('jquery-ui-css','http://anthem.edu/wp-content/themes/whitelabel-framework/appearance/jquery-ui.css?ver=3.3');
 }
 
 // remove scripts from footer if Gallery is not being used on the page

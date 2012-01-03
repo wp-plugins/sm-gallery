@@ -5,7 +5,7 @@ Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.1
 Tested up to: 3.2.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
@@ -60,6 +60,7 @@ To install the plugin manually:
 
 == Changelog ==
 - Cleaned up debug code that was not needed and commented plugin code to extend the use of the plugin for other developers.
+- Corrected missing jQuery UI issue and styling issues
 
 == Upgrade Notice ==
 Version 1.0.2
@@ -69,6 +70,9 @@ Requires at least WordPress version 3.1.
 
 Q: How do I use the plugin? How do I get a gallery into my page?
 A: The same way you would have before you installed the plugin! We tried to keep it simple, simply upload a handfull of images to your page and then choose the "insert gallery" option from within the WordPress media popup box. This will insert some code onto your page that looks like this, [gallery], then update and view the page to see how the plugin has enhanced the gallery features within WordPress.
+
+Q: What parameters does the shortcode accept?
+A: Setting the modal parameter to false will add the gallery directly on the page, setting it to true will allow you to create a clickable thumbnail with a gallery that opens in a modal box. Setting the post_id parameter will pull the gallery from a specific post, leaving it blank will use the id of the current post. Title can be used to set a title. Thumbnail is used to set the sorce of the thunmbnail image.  The thumb_class parameter can be used to add a class to your thumbnail image. Example [gallery modal="true" post_id="1234" title="My Slideshow" thumbnail="/wp-content/my-theme/images/my-thumbnail.png" thumb_class="gallery-thumb"].  
 
 Q: What is a modal box and why do I care?
 A: A modal box is a "pop-up" that loads inside of your webpage without navigating the URL. This means pop-up blockers won't effect it, and users won't actually leave your website or URL to view the contents of the popup. Its more like an "overlay" that sits on top of your webpage until its closed. Why do you care? Modal boxes are becoming more and more popular to supply additional content and information to visitors that wouldn't normally fit on the webpage.
