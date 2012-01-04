@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.4
+Version: 1.0.5
 Author URI: http://sethmatics.com/
 */
 
@@ -21,7 +21,6 @@ function sm_gallery_scripts_and_styles() {
 	wp_deregister_script( 'jquery-ui' );
 	wp_register_script( 'jquery-ui', plugins_url('/js/jquery-ui-dialog.custom.min.js', __FILE__), array('jquery') );
 	wp_enqueue_script('jquery-ui');
-	wp_enqueue_style('jquery-ui-css','http://anthem.edu/wp-content/themes/whitelabel-framework/appearance/jquery-ui.css?ver=3.3');
 }
 
 // remove scripts from footer if Gallery is not being used on the page
@@ -66,6 +65,7 @@ function sm_gallery( $atts, $content = null ) {
 	// set width and height of gallery and gallery image?>
     <style> .ad-gallery { width: <?php echo $box_width-50; ?>px; } .ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px; } 
     #adGal<?php echo $count;?>.ad-gallery { width: <?php echo $box_width-65; ?>px!important; } #adGal<?php echo $count;?>.ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px!important; }
+	.ad-gallery .ad-controls { line-height:normal!important;}
     </style>
     
 	<?php 
@@ -190,10 +190,10 @@ function sm_load_ad_gallery_css($modal='false') { ?>
     <script type="text/javascript">
         jQuery(document).ready(function() {
 			if (!document.createStyleSheet){
-				jQuery("head").append(jQuery("<link id=\"style1\" rel='stylesheet' href='<?php echo plugins_url('css/smoothness/jquery-ui-1.8.13.custom.css', __FILE__);?>' type='text/css' media='screen' />"));
+				jQuery("head").append(jQuery("<link id=\"style1\" rel='stylesheet' href='<?php echo plugins_url('css/smoothness/jquery-ui.css', __FILE__);?>' type='text/css' media='screen' />"));
 			}
 			else {
-				document.createStyleSheet('<?php echo plugins_url('css/smoothness/jquery-ui-1.8.13.custom.css', __FILE__);?>');
+				document.createStyleSheet('<?php echo plugins_url('css/smoothness/jquery-ui.css', __FILE__);?>');
 			}
 		});
     </script>
