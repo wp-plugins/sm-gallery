@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.5
+Version: 1.0.6
 Author URI: http://sethmatics.com/
 */
 
@@ -57,7 +57,10 @@ function sm_gallery( $atts, $content = null ) {
 	  'title' => 'Gallery',
 	  'thumbnail' => false,
 	  'thumb_class' => 'alignright',
+	  'exclude_featured' => false,
 	  ), $atts ) );
+	  
+	  
 	  
 	  if($post_id == '')
 	  	$post_id = $post->ID;
@@ -78,13 +81,13 @@ function sm_gallery( $atts, $content = null ) {
 	
 	// output gallery and thumbnail if modal gallery
 	if($modal=='true') { 
-		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id).'</div>';
-		$gallery = $thumbnail.'<div id="galleryContent'.$count.'" class="isModal" style="height:1px; width:1px; overflow:hidden;">'.get_sm_gallery($post_id, $count).'</div>';
+		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id, 0, $exclude_featured).'</div>';
+		$gallery = $thumbnail.'<div id="galleryContent'.$count.'" class="isModal" style="height:1px; width:1px; overflow:hidden;">'.get_sm_gallery($post_id, $count, $exclude_featured).'</div>';
 		
     }
 	// only out put gallery if not modal
 	else { 
-		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id).'</div>';
+		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id, 0, $exclude_featured).'</div>';
 	}
 	
 	// script for modal window ?>
@@ -116,7 +119,7 @@ function sm_gallery( $atts, $content = null ) {
 }
 
 // create gallery structure and content
-function get_sm_gallery($post_id, $count=0){
+function get_sm_gallery($post_id, $count=0, $exclude_featured){
 	$gallery = '<div class="ad-gallery" id="adGal'.$count.'">'.PHP_EOL;
 	$gallery .= '<div class="ad-image-wrapper">'.PHP_EOL;
 	$gallery .= '</div>'.PHP_EOL;
@@ -126,11 +129,17 @@ function get_sm_gallery($post_id, $count=0){
 	$gallery .= '<div class="ad-thumbs">'.PHP_EOL;
 	$gallery .= '<ul class="ad-thumb-list">'.PHP_EOL;
 	
+	
+	$exclude = '';
+	if($exclude_featured && $exclude_featured!="false")
+		$exclude = get_post_thumbnail_id( $post_id ); // exclude the featured image
+		
+	
 	// get gallery images from post
 	$args = array(
 		'post_type'	  => 'attachment',
 		'numberposts' => -1, // bring them all
-		'exclude' 	  =>  get_post_thumbnail_id( $post_id ), // exclude the featured image
+		'exclude' 	  =>  $exclude, // exclude the featured image
 		'orderby'     => 'menu_order',
 		'order'       => 'ASC',
 		'post_status' => null,
@@ -138,6 +147,7 @@ function get_sm_gallery($post_id, $count=0){
 		); 
 	
 	$slides = get_posts($args);
+	
 	
 	foreach ($slides as $slide) {
 		
@@ -282,6 +292,22 @@ function sm_featured_gallery_form(){
         <span style="font-size:11px;color: #999;">Use when pulling gallery from another post</span> </label><br />
         <input name="sm_featured_gallery_post_id" id="sm_featured_gallery_post_id" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_post_id'][0]; ?>" />
         <br />
+        <div style="margin-bottom:15px;">
+        	<input type="checkbox" name="sm_featured_gallery_exclude_featured_checkbox" id="sm_featured_gallery_exclude_featured_checkbox" value="true" <?php if(get_post_meta($post->ID, '_sm_featured_gallery_exclude_featured', true) == 'true') { echo 'checked="checked"'; } ?> >
+        	<label for="sm_featured_gallery_exclude_featured_checkbox">Exclude featured image</label>
+            <input name="sm_featured_gallery_exclude_featured" id="sm_featured_gallery_exclude_featured" type="hidden" value="" />
+            <script type="text/javascript">
+				jQuery(document).ready(function() {
+  					jQuery('#sm_featured_gallery_exclude_featured_checkbox').change(function() {
+						if( jQuery('#sm_featured_gallery_exclude_featured_checkbox').attr('checked') )
+							jQuery('#sm_featured_gallery_exclude_featured').val('true');
+						else
+							jQuery('#sm_featured_gallery_exclude_featured').val('false');
+					});
+				});
+			</script>
+            <div class="clearfloat"></div>
+            <br />
         <label for="sm_featured_gallery_width">Gallery Width</label><br />
         <input name="sm_featured_gallery_width" id="sm_featured_gallery_width" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_width'][0]; ?>" />
         <br />
@@ -346,7 +372,7 @@ function sm_featured_gallery_save(){
 				$value=str_replace('px', '', $value); 
 			}
 			// dont' save nonce or checkbox
-			if($key != 'sm_featured_gallery_nonce' && $key != 'sm_featured_gallery_hyperlink_new_checkbox') {
+			if($key != 'sm_featured_gallery_nonce' && $key != 'sm_featured_gallery_hyperlink_new_checkbox'  && $key != 'sm_featured_gallery_exclude_featured_checkbox') {
 				if($value != '')
 					update_post_meta($post->ID, '_'.$key, trim($value) );
 				else
@@ -383,6 +409,7 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	$title = $post_meta['_sm_featured_gallery_title'][0];
 	$thumb = $post_meta['_sm_featured_gallery_thumb'][0];
 	$thumb_class = $post_meta['_sm_featured_gallery_thumb_class'][0];
+	$exclude_featured = $post_meta['_sm_featured_gallery_exclude_featured'][0];
 	
 	$featuredObj = wp_get_attachment_image_src(get_post_thumbnail_id( $post_id ), 'full');
 		
@@ -393,6 +420,7 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	if($height != '')$shortCodeContent .=' box_height="'.$height.'" ';
 	if($width != '')$shortCodeContent .='box_width="'.$width.'" ';
 	if($title != '')$shortCodeContent .=' title="'.$title.'" '; 
+	if($exclude_featured != '')$shortCodeContent .=' exclude_featured="'.$exclude_featured.'" ';
 	
 	if($galleryType == 'append') $shortCodeContent .=' thumbnail="'.$thumb.'" ';
 	
@@ -409,4 +437,3 @@ function anthem_featured_filter( $html, $post_id, $post_image_id ) {
 	}
     return $html;
 }
-?>
