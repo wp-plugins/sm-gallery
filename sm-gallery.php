@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.6
+Version: 1.0.7
 Author URI: http://sethmatics.com/
 */
 
@@ -292,7 +292,6 @@ function sm_featured_gallery_form(){
         <span style="font-size:11px;color: #999;">Use when pulling gallery from another post</span> </label><br />
         <input name="sm_featured_gallery_post_id" id="sm_featured_gallery_post_id" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_post_id'][0]; ?>" />
         <br />
-        <div style="margin-bottom:15px;">
         	<input type="checkbox" name="sm_featured_gallery_exclude_featured_checkbox" id="sm_featured_gallery_exclude_featured_checkbox" value="true" <?php if(get_post_meta($post->ID, '_sm_featured_gallery_exclude_featured', true) == 'true') { echo 'checked="checked"'; } ?> >
         	<label for="sm_featured_gallery_exclude_featured_checkbox">Exclude featured image</label>
             <input name="sm_featured_gallery_exclude_featured" id="sm_featured_gallery_exclude_featured" type="hidden" value="" />
