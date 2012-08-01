@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: Jeremy Smeltzer & Seth Carstens
-Version: 1.0.7
+Version: 1.0.8
 Author URI: http://sethmatics.com/
 */
 
@@ -98,10 +98,10 @@ function sm_gallery( $atts, $content = null ) {
 	
 			if( jQuery("#galleryContent<?php echo $count;?>" ).hasClass('isModal') ){
 				modalBox<?php echo $count;?> = jQuery( "#galleryContent<?php echo $count; ?> .ad-gallery" ).dialog({
-							 title: '<?=$title; ?>',
+							 title: '<?php echo $title; ?>',
 							 autoOpen: false,
-							 width: <?=$box_width; ?>,
-							 height: <?=$box_height; ?>,
+							 width: <?php echo $box_width; ?>,
+							 height: <?php echo $box_height; ?>,
 							 modal: true,
 							 resizable: false,
 							 draggable: true,
@@ -184,10 +184,10 @@ function sm_load_ad_gallery_css($modal='false') { ?>
             });
             
         if (!document.createStyleSheet){
-            jQuery("head").append(jQuery("<link id=\"style1\" rel='stylesheet' href='<?php echo plugins_url('css/jquery.ad-gallery.css', __FILE__);?>' type='text/css' media='screen' />"));
+            jQuery("head").append(jQuery("<link id=\"style1\" rel='stylesheet' href='<?php echo apply_filters('sm_gallery_css', plugins_url('css/jquery.ad-gallery.css', __FILE__) );?>' type='text/css' media='screen' />"));
         }
         else {
-            document.createStyleSheet('<?php echo plugins_url('css/jquery.ad-gallery.css', __FILE__);?>');
+            document.createStyleSheet('<?php echo apply_filters('sm_gallery_css', plugins_url('css/jquery.ad-gallery.css', __FILE__) ); ?>');
         }
 	});
     </script>
@@ -286,11 +286,11 @@ function sm_featured_gallery_form(){
     
     <div id="sm_featured_gallery_options">
         <label for="sm_featured_gallery_title">Title</label><br />
-        <input name="sm_featured_gallery_title" id="sm_featured_gallery_title" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_title'][0]; ?>" />
+        <input name="sm_featured_gallery_title" id="sm_featured_gallery_title" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_title'][0]; ?>" />
         <br />
         <label for="sm_featured_gallery_post_id">Post ID (Leave blank for current post)<br />
         <span style="font-size:11px;color: #999;">Use when pulling gallery from another post</span> </label><br />
-        <input name="sm_featured_gallery_post_id" id="sm_featured_gallery_post_id" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_post_id'][0]; ?>" />
+        <input name="sm_featured_gallery_post_id" id="sm_featured_gallery_post_id" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_post_id'][0]; ?>" />
         <br />
         	<input type="checkbox" name="sm_featured_gallery_exclude_featured_checkbox" id="sm_featured_gallery_exclude_featured_checkbox" value="true" <?php if(get_post_meta($post->ID, '_sm_featured_gallery_exclude_featured', true) == 'true') { echo 'checked="checked"'; } ?> >
         	<label for="sm_featured_gallery_exclude_featured_checkbox">Exclude featured image</label>
@@ -308,23 +308,23 @@ function sm_featured_gallery_form(){
             <div class="clearfloat"></div>
             <br />
         <label for="sm_featured_gallery_width">Gallery Width</label><br />
-        <input name="sm_featured_gallery_width" id="sm_featured_gallery_width" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_width'][0]; ?>" />
+        <input name="sm_featured_gallery_width" id="sm_featured_gallery_width" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_width'][0]; ?>" />
         <br />
         <label for="sm_featured_gallery_height">Gallery Height</label><br />
-        <input name="sm_featured_gallery_height" id="sm_featured_gallery_height" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_height'][0]; ?>" />
+        <input name="sm_featured_gallery_height" id="sm_featured_gallery_height" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_height'][0]; ?>" />
         <br />
         <div id="sm_featured_gallery_thumb_options">
             <label for="sm_featured_gallery_thumb">Thumbnail Image</label><br />
-            <input name="sm_featured_gallery_thumb" id="sm_featured_gallery_thumb" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_thumb'][0]; ?>" />
+            <input name="sm_featured_gallery_thumb" id="sm_featured_gallery_thumb" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_thumb'][0]; ?>" />
             <br />
             <label for="sm_featured_gallery_thumb_class">Thumbnail Class</label><br />
-            <input name="sm_featured_gallery_thumb_class" id="sm_featured_gallery_thumb_class" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_thumb_class'][0]; ?>" />
+            <input name="sm_featured_gallery_thumb_class" id="sm_featured_gallery_thumb_class" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_thumb_class'][0]; ?>" />
             <br />
         </div>
     </div>
     <div id="sm_featured_gallery_hyperlink_options">
         <label for="sm_featured_gallery_hyperlink">Link</label><br />
-        <input name="sm_featured_gallery_hyperlink" id="sm_featured_gallery_hyperlink" type="text" style="margin-bottom:10px;width:100%;" value="<?=$post_meta['_sm_featured_gallery_hyperlink'][0]; ?>" />
+        <input name="sm_featured_gallery_hyperlink" id="sm_featured_gallery_hyperlink" type="text" style="margin-bottom:10px;width:100%;" value="<?php echo $post_meta['_sm_featured_gallery_hyperlink'][0]; ?>" />
         <br />
         <div style="margin-bottom:10px;">
         	<input type="checkbox" name="sm_featured_gallery_hyperlink_new_checkbox" id="sm_featured_gallery_hyperlink_new_checkbox" value="yes" <?php if(get_post_meta($post->ID, '_sm_featured_gallery_hyperlink_new_widow', true) == 'yes') { echo 'checked="checked"'; } ?> >
