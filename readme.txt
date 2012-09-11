@@ -5,13 +5,15 @@ Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.1
 Tested up to: 3.4.1
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 
 Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
 == Description ==
 
 Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
+
+NEW TO WORDPRESS? Please read about how the default gallery works at http://codex.wordpress.org/Gallery_Shortcode
 
 We decided that the default gallery that WordPress builds is lacking some very simple features. 
 Enhance your gallery's without having to learn a completely new interface! Upload images as you
