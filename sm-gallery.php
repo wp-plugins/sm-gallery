@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: sethmatics, bigj9901
-Version: 1.0.9
+Version: 1.1.0
 Author URI: http://sethmatics.com/
 */
 
@@ -42,7 +42,9 @@ add_image_size( 'sm-gallery-thumbnail', 100, 100, true );
 
 //add our own gallery shortcode
 //[gallery modal="" post_id="" box_height="" box_width="" title="" thumbnail="" thumb_class=""]
-add_shortcode('gallery', 'sm_gallery');
+$sm_gallery_shortcode_noconflict = get_option('sm_gallery_shortcode_noconflict');
+if(empty($sm_gallery_shortcode_noconflict)) add_shortcode('gallery', 'sm_gallery');
+add_shortcode('sm_gallery', 'sm_gallery');
 
 function sm_gallery( $atts, $content = null ) {
 	global $post;
@@ -382,9 +384,9 @@ function sm_featured_gallery_save(){
 }
 
 // filter featured image content and add gallery when applicable
-add_filter( 'post_thumbnail_html', 'anthem_featured_filter', 10, 3 );
+add_filter( 'post_thumbnail_html', 'sm_gallery_featured_filter', 10, 3 );
 
-function anthem_featured_filter( $html, $post_id, $post_image_id ) {
+function sm_gallery_featured_filter( $html, $post_id, $post_image_id ) {
 	$post_meta = get_post_custom($post_id);
 	$galleryType = $post_meta['_sm_featured_gallery_type'][0];
 	
