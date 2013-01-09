@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: sethmatics, bigj9901
-Version: 1.1.0
+Version: 1.1.1
 Author URI: http://sethmatics.com/
 */
 
@@ -66,13 +66,13 @@ function sm_gallery( $atts, $content = null ) {
 	  
 	  if($post_id == '')
 	  	$post_id = $post->ID;
-	 
+
+ob_start();	 
 	// set width and height of gallery and gallery image?>
     <style> .ad-gallery { width: <?php echo $box_width-50; ?>px; } .ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px; } 
     #adGal<?php echo $count;?>.ad-gallery { width: <?php echo $box_width-65; ?>px!important; } #adGal<?php echo $count;?>.ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px!important; }
 	.ad-gallery .ad-controls { line-height:normal!important;}
     </style>
-    
 	<?php 
 	// load css
 	sm_load_ad_gallery_css($modal);
@@ -89,7 +89,7 @@ function sm_gallery( $atts, $content = null ) {
     }
 	// only out put gallery if not modal
 	else { 
-		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id, 0, $exclude_featured).'</div>';
+		$gallery = '<div id="galleryContent'.$count.'">'.get_sm_gallery($post_id, 0, $exclude_featured, $atts, $content = null).'</div>';
 	}
 	
 	// script for modal window ?>
@@ -117,11 +117,13 @@ function sm_gallery( $atts, $content = null ) {
 		});
 	</script>
     <?php
+		
+	$gallery = ob_get_clean().$gallery;
 	return $gallery;
 }
 
 // create gallery structure and content
-function get_sm_gallery($post_id, $count=0, $exclude_featured){
+function get_sm_gallery($post_id, $count=0, $exclude_featured, $atts='', $content = null){
 	$gallery = '<div class="ad-gallery" id="adGal'.$count.'">'.PHP_EOL;
 	$gallery .= '<div class="ad-image-wrapper">'.PHP_EOL;
 	$gallery .= '</div>'.PHP_EOL;
@@ -135,8 +137,7 @@ function get_sm_gallery($post_id, $count=0, $exclude_featured){
 	$exclude = '';
 	if($exclude_featured && $exclude_featured!="false")
 		$exclude = get_post_thumbnail_id( $post_id ); // exclude the featured image
-		
-	
+			
 	// get gallery images from post
 	$args = array(
 		'post_type'	  => 'attachment',
@@ -147,6 +148,14 @@ function get_sm_gallery($post_id, $count=0, $exclude_featured){
 		'post_status' => null,
 		'post_parent' => $post_id // post id with the gallery
 		); 
+		
+		
+	if ( ! empty( $atts['ids'] ) ) {
+		// 'ids' is explicitly ordered, unless you specify otherwise.
+		if ( empty( $atts['orderby'] ) )
+			$args['orderby'] = 'post__in';
+		$args['include'] = $atts['ids'];
+	}
 	
 	$slides = get_posts($args);
 	
