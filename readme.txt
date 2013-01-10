@@ -4,8 +4,8 @@ Contributors: bigj9901, sethmatics
 Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.1
-Tested up to: 3.4.1
-Stable tag: 1.0.9
+Tested up to: 3.5
+Stable tag: 1.1.2
 
 Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
