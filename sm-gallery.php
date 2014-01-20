@@ -65,7 +65,7 @@ function sm_gallery( $atts, $content = null ) {
 
 ob_start();	 
 	// set width and height of gallery and gallery image?>
-    <style> .ad-gallery { width: <?php echo $box_width-50; ?>px; } .ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px; } 
+    <style> .ad-gallery { width: <?php echo $box_width-50; ?>px; } .ad-gallery .ad-image-wrapper { height: <?php echo $box_height-340; ?>px; }
     #adGal<?php echo $count;?>.ad-gallery { width: <?php echo $box_width-65; ?>px!important; } #adGal<?php echo $count;?>.ad-gallery .ad-image-wrapper { height: <?php echo $box_height-220; ?>px!important; }
 	.ad-gallery .ad-controls { line-height:normal!important;}
     </style>
