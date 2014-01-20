@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: sethmatics, bigj9901
-Version: 1.1.2
+Version: 1.1.4
 Author URI: http://sethmatics.com/
 */
 
@@ -18,9 +18,8 @@ if (!is_admin()) {
 function sm_gallery_scripts_and_styles() {
 	wp_enqueue_script('jquery-ad-gallery-scripts', plugins_url('js/jquery.ad-gallery.js', __FILE__), array('jquery'), '', true );
 	//older version of UI scripts (core, resizeable, dragable, dialog) fixes IE Jump issue
-	wp_deregister_script( 'jquery-ui' );
-	wp_register_script( 'jquery-ui', plugins_url('/js/jquery-ui-dialog.custom.min.js', __FILE__), array('jquery') );
-	wp_enqueue_script('jquery-ui');
+	wp_enqueue_script('jquery-ui', false, array('jquery'), '', true );
+	wp_enqueue_script('jquery-ui-dialog', false, array('jquery'), '', true );
 }
 
 // remove scripts from footer if Gallery is not being used on the page
@@ -36,9 +35,6 @@ function sm_conditional_gallery_script_enqueue() {
 
 // remove default gallery shortcode	
 remove_shortcode('gallery');
-
-// add custome thumbnail size
-add_image_size( 'sm-gallery-thumbnail', 100, 100, true );
 
 //add our own gallery shortcode
 //[gallery modal="" post_id="" box_height="" box_width="" title="" thumbnail="" thumb_class=""]
@@ -162,8 +158,9 @@ function get_sm_gallery($post_id, $count=0, $exclude_featured, $atts='', $conten
 	
 	foreach ($slides as $slide) {
 		
-		// get the thumbnail src
-		$thumbnailObj = wp_get_attachment_image_src($slide->ID, 'sm-gallery-thumbnail');
+		//get the thumbnail src
+		//try to get thumbnails that are 100 by 100 or closest possible size
+		$thumbnailObj = wp_get_attachment_image_src($slide->ID, array(100,100));
 		$thumbnailURL = $thumbnailObj[0];
 		
 		//get the full size img src
@@ -190,7 +187,7 @@ function sm_load_ad_gallery_css($modal='false') { ?>
     ?>
 	<script type="text/javascript">
     jQuery(document).ready(function() {
-        jQuery('.ui-widget-overlay').live('click', function(event) {
+        jQuery('.ui-widget-overlay').on('click', function(event) {
                 jQuery('.ui-icon-closethick').click();
             });
             

@@ -406,6 +406,7 @@
       var thumbs_scroll_interval = false;
       $(this.scroll_back).add(this.scroll_forward).click(
         function() {
+
           // We don't want to jump the whole width, since an image
           // might be cut at the edge
           var width = context.nav_display_width - 50;
@@ -421,6 +422,8 @@
             context.slideshow.stop();
           };
           context.thumbs_wrapper.animate({scrollLeft: left +'px'});
+	      console.log('scroll forward '+width);
+	      console.log(context.thumbs_wrapper);
           return false;
         }
       ).css('opacity', 0.6).hover(

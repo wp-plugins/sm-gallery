@@ -148,6 +148,7 @@
       .ad-gallery .ad-thumbs .ad-thumb-list {
         float: left;
         width: 9000px;
+	    max-width: none !important;
         list-style: none;
 		height:106px!important;
       }
@@ -162,6 +163,7 @@
             .ad-gallery .ad-thumbs li a img {
               border: 3px solid #CCC;
               display: block;
+	          max-width: 100px !important;
             }
             .ad-gallery .ad-thumbs li a.ad-active img {
               border: 3px solid #616161;
