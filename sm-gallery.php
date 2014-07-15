@@ -4,7 +4,7 @@ Plugin Name: SM Gallery
 Plugin URI: http://wordpress.org/extend/plugins/sm-gallery/
 Description: Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 Author: sethmatics, bigj9901
-Version: 1.1.5
+Version: 1.1.6
 Author URI: http://sethmatics.com/
 */
 
@@ -16,26 +16,42 @@ if ( ! function_exists( 'add_filter' ) ) {
 }
 
 if ( ! class_exists('sm_gallery') ) {
+
 	add_action( 'plugins_loaded', array ( 'sm_gallery_plugin', 'get_instance' ) );
 
 	class sm_gallery_plugin {
 		//singleton instance
 		protected static $instance = NULL;
 
-		//plugins working instance
-		public static function get_instance() {
-			NULL === self::$instance and self::$instance = new self;
-			return self::$instance;
-		}
-
 		//class init
 		function __construct(){
 			define( 'SM_GALLERY_BASENAME',   plugin_basename(__FILE__) );
+			define( 'SM_GALLERY_TEXTDOMAIN',   'sm_gallery_plugin' );
 			add_action( 'init', array( $this, 'on_init') );
 			add_action( 'admin_init', array( $this, 'on_admin_init' ) );
 			//maybe remove gallery shortcode, and setup sm_gallery shortcode
 			self::setup_shortcodes();
+			//will be for use with plugin option to disable gallery shortcode override
+			//add_action( 'wp_ajax_wm_config-update', array( $this, 'save_config' ) );
+			//add_action( 'wp_ajax_wm_config-active', array( $this, 'save_active' ) );
+		}
 
+		//plugins working instance
+		public static function get_instance() {
+			self::load_includes();
+			NULL === self::$instance and self::$instance = new self;
+			return self::$instance;
+		}
+
+		//additional files included for front end or admin
+		public static function load_includes(){
+			if(!is_admin()) {
+				include_once(__DIR__.'/sm-gallery-builder.php');
+			}
+			else {
+				include_once(__DIR__.'/sm-gallery-admin.php');
+				sm_gallery_admin::get_instance();
+			}
 		}
 
 		//prepare and or modify shortcodes for use
@@ -54,6 +70,8 @@ if ( ! class_exists('sm_gallery') ) {
 		function on_init(){
 			add_action('wp_enqueue_scripts', array($this, 'gallery_scripts_and_styles'));
 			add_action('get_footer', array($this, 'conditional_gallery_script_enqueue', 1));
+			// filter featured image content and add gallery when applicable
+			add_filter( 'post_thumbnail_html', 'sm_gallery_featured_filter', 10, 3 );
 		}
 
 		//front end javascript for new gallery uix

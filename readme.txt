@@ -5,13 +5,13 @@ Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.7
 Tested up to: 4.0-beta1
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 
-Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
+Gallery plugin that's simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
 == Description ==
 
-Gallery plugin thats simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
+Gallery plugin that's simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
 NEW TO WORDPRESS? Please read about how the default gallery works at http://codex.wordpress.org/Gallery_Shortcode
 
@@ -30,7 +30,7 @@ will cause the featured image, when clicked, to open the sexy overlay box for yo
 Great.... so now I have to worry about 10 more javascript libraries on my page... Nope! The only 
 scripts we are loading on the page are jQuery UI and small gallery plugin for jQuery. This means it
 shouldn't conflict with any of your other site features. Well, if your not sold yet, just try it out
-and see for yourself how quick and easy it is to extend the gallery wordpress features.
+and see for yourself how quick and easy it is to extend the gallery WordPress features.
 
 Features include:
 
@@ -61,11 +61,15 @@ To install the plugin manually:
 5. Insert a [gallery] into a page or post, or use the "Featured Image Gallery" tools to activate the gallery on the featured image.
 
 == Changelog ==
+- added filters and moved code into classes for easier extensibility
 - Changed featured image exclusion to be optional. Defaults to false.
 - Cleaned up debug code that was not needed and commented plugin code to extend the use of the plugin for other developers.
 - Corrected missing jQuery UI issue and styling issues
 
 == Upgrade Notice ==
+Version 1.1.5
+Had a bug, and doesn't work. Please do not use this version.
+
 Version 1.0.2
 Requires at least WordPress version 3.1.
 
