@@ -1,11 +1,11 @@
 === SM Gallery ===
 
-Contributors: sethmatics, bigj9901
+Contributors: sethcarstens, sethmatics
 Donate link: http://sethmatics.com/extend/plugins/sm-gallery
 Tags: gallery, featured image, image, media, plugin, page
 Requires at least: 3.7
-Tested up to: 4.0-beta1
-Stable tag: 1.1.7
+Tested up to: 4.2
+Stable tag: 1.1.8
 
 Gallery plugin that's simple because it leans on existing WordPress gallery features provided by http://sethmatics.com/.
 
